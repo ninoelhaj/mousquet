@@ -337,20 +337,23 @@ def lancer_gardien():
                      creationflags=0x00000008 | 0x00000200 | 0x08000000)
 
 # ============================ STYLE ===============================
-# Thème « Jungle Cayo » : vert canopée sur fond sous-bois, or pour ce qui demande ton attention. Couleurs en R, G, B.
-FOND = (9, 19, 14)
-TEXTE = (214, 228, 212)
-TERNE = (82, 108, 88)
-MOYEN = (140, 164, 142)
-ACCENT = (132, 222, 120)
-OR = (236, 192, 84)
-BON = (127, 216, 140)
+# Thème « Cayo Perico », celui de la bannière : nuit noire, or de la lune, violet de la panthère, rose de la fleur,
+# vert des feuilles, gris des rochers. Couleurs en R, G, B.
+FOND = (0, 0, 0)
+TEXTE = (236, 228, 208)
+TERNE = (112, 104, 86)
+MOYEN = (170, 158, 128)
+ACCENT = (224, 183, 80)
+OR = (246, 214, 132)
+ROSE = (212, 46, 129)
+VIOLET = (92, 94, 186)
+BON = (60, 168, 96)
 REPARE = (242, 196, 109)
-MAUVAIS = (240, 112, 100)
-TRAIT = (32, 56, 40)
-POINTILLE = (40, 66, 48)
-PISTE = (42, 70, 50)
-LOGO_A, LOGO_B = (92, 214, 110), (236, 192, 84)
+MAUVAIS = (226, 64, 64)
+TRAIT = (62, 50, 22)
+POINTILLE = (56, 50, 38)
+PISTE = (48, 40, 22)
+LOGO = (VIOLET, ROSE, ACCENT)     # dégradé du logo : panthère, fleur, lune
 LARGEUR = 46
 COLONNES, RANGS = 52, 25
 ESC = "\x1b"
@@ -393,8 +396,13 @@ def melange(a, b, k):
     return tuple(a[i] + (b[i] - a[i]) * k for i in range(3))
 
 
-def grad(t, a, b):
-    return "".join(ink(ch, melange(a, b, i / max(1, len(t) - 1))) for i, ch in enumerate(t))
+def grad(t, teintes):
+    """Dégradé caractère par caractère à travers plusieurs teintes."""
+    def teinte(k):
+        k *= len(teintes) - 1
+        i = min(int(k), len(teintes) - 2)
+        return melange(teintes[i], teintes[i + 1], k - i)
+    return "".join(ink(ch, teinte(i / max(1, len(t) - 1))) for i, ch in enumerate(t))
 
 
 def label(t, droite=""):
@@ -424,16 +432,16 @@ class Ecran:
 
 def banniere(e, sous_titre):
     heure = datetime.now().strftime("%d/%m %H:%M")
-    e.ecrire(R_LOGO, "   " + grad("▄ ▄ ▄", LOGO_A, LOGO_B) + "  " + ink("mousquet", ACCENT)
+    e.ecrire(R_LOGO, "   " + grad("▄ ▄ ▄", LOGO) + "  " + ink("mousquet", ACCENT)
              + " " * (LARGEUR - 5 - 2 - 8 - len(heure)) + ink(heure, TERNE))
-    e.ecrire(R_LOGO + 1, "   " + grad("▄███▄", LOGO_A, LOGO_B) + "  " + ink(sous_titre, TERNE))
+    e.ecrire(R_LOGO + 1, "   " + grad("▄███▄", LOGO) + "  " + ink(sous_titre, TERNE))
     e.ecrire(R_TRAIT, "   " + ink("─" * LARGEUR, TRAIT))
 
 
 class Canopee:
-    """Quatre rangs de jungle qui bougent au vent, des lucioles."""
-    TONS = [((30, 92, 48), (112, 214, 112)), ((26, 84, 44), (98, 198, 100)),
-            ((44, 80, 52), (122, 176, 112)), ((58, 86, 44), (156, 172, 84))]
+    """Quatre rangs de jungle qui bougent au vent, des lucioles : feuilles vertes, fleurs roses, rochers gris."""
+    TONS = [((19, 90, 48), (56, 156, 86)), ((19, 80, 44), (50, 136, 78)),
+            ((120, 26, 76), (212, 46, 129)), ((86, 86, 92), (172, 172, 177))]
 
     def __init__(self):
         self.r = random.Random(11)
@@ -470,7 +478,7 @@ class Canopee:
 
 def ecran_fin(e, titre, detail):
     sys.stdout.write(f"{ESC}[2J{ESC}[?25l" if VT else "")
-    banniere(e, "jungle cayo · mode chasse")
+    banniere(e, "cayo perico · mode chasse")
     e.ecrire(R_LAB_CAN, "   " + ink("○", MOYEN) + " " + ink(titre, TEXTE))
     e.ecrire(R_LAB_CAN + 1, "   " + ink(detail, TERNE))
     e.envoyer()
@@ -522,7 +530,7 @@ def chasser(e, stop):
     sys.stdout.write(f"{ESC}[2J{ESC}[?25l" if VT else "")
     canopee = Canopee()
     t0 = time.monotonic()
-    banniere(e, "jungle cayo · mode chasse")
+    banniere(e, "cayo perico · mode chasse")
     e.ecrire(R_LAB_CAN, label("canopée"))
     e.ecrire(R_LAB_PREP, label("préparation"))
     e.envoyer()
@@ -557,7 +565,7 @@ def chasser(e, stop):
     def demander(rang, nom, question, delai, avertissement=()):
         """Question o/n sur la ligne de l'étape (avertissement en dessous) ; sans réponse à temps, c'est non."""
         e.ecrire(R_PREP + rang, "   " + ink(nom, TEXTE) + " " + ink("·" * max(1, 12 - len(nom)), POINTILLE) + " "
-                 + ink(question, OR))
+                 + ink(question, ROSE))
         for i, l in enumerate(avertissement):
             e.ecrire(R_ETAT + i, "   " + ink(l, MAUVAIS if i == 0 else TEXTE))
         e.envoyer()
