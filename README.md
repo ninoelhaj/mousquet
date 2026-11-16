@@ -15,7 +15,7 @@
 revient exactement à sa place.
 
 <p align="center">
-  <img src="docs/console.webp" alt="mousquet pendant une chasse : préparation, question lowbush, FiveM ouvert, puis tout revient" width="470">
+  <img src="docs/console.webp" alt="mousquet pendant une chasse : préparation, chaque mod demandé, FiveM ouvert, puis tout revient" width="470">
 </p>
 
 > [!NOTE]
@@ -23,9 +23,9 @@ revient exactement à sa place.
 > dans le dossier de FiveM et change tes réglages graphiques. C'est tout.
 
 > [!WARNING]
-> Les mods qui enlèvent des buissons (comme **lowbush**) donnent un avantage et sont interdits sur beaucoup de
-> serveurs : **ban possible**. mousquet ne fournit aucun mod. Si tu en mets un, il te le redemande à chaque chasse,
-> avec cet avertissement.
+> Les mods de chasse comme **lowbush** (moins de buissons) ou **stamina** (endurance infinie) donnent un avantage
+> et sont interdits sur beaucoup de serveurs : **ban possible**. mousquet ne fournit aucun mod. Si tu en mets, il te
+> les demande un par un à chaque chasse, avec cet avertissement.
 
 ## 🚀 Démarrer
 
@@ -41,7 +41,7 @@ au bout de 10 secondes, affiche « chasse finie · tout est revenu » et se ferm
 
 <table>
   <tr>
-    <td align="center"><img src="docs/question.png" alt="La question lowbush" width="260"><br><sub><b>Avant</b> : lowbush, avec l'avertissement</sub></td>
+    <td align="center"><img src="docs/question.png" alt="Un mod de chasse demandé, avec l'avertissement" width="260"><br><sub><b>Avant</b> : chaque mod demandé, avec l'avertissement</sub></td>
     <td align="center"><img src="docs/chasse.png" alt="En chasse" width="260"><br><sub><b>Pendant</b> : FiveM tourne tout neuf</sub></td>
     <td align="center"><img src="docs/fin.png" alt="Tout est revenu" width="260"><br><sub><b>Après</b> : tout est revenu</sub></td>
   </tr>
@@ -50,7 +50,7 @@ au bout de 10 secondes, affiche « chasse finie · tout est revenu » et se ferm
 | Étape | Ce qui se passe |
 |---|---|
 | **fivem** | vérifie que FiveM est installé et fermé (ouvert, il refuse : les fichiers seraient verrouillés) |
-| **lowbush** | si un mod « à risque » est dans `mods_chasse`, te demande `o` ou `n` (sans réponse en 20 s : non) |
+| **mods chasse** | pour chaque mod de `mods_chasse`, te demande `o` ou `n` (sans réponse en 20 s : non) |
 | **mods** | déplace tout ce qui est dans `FiveM.app\mods` et `FiveM.app\plugins` (mods, ReShade, presets…) vers `FiveM\mis_de_cote_par_mousquet`, puis copie tes mods de chasse |
 | **graphismes** | garde tes réglages dans `reglages\normal.xml` et met les plus bas du jeu (résolution, plein écran et densité de population ne bougent pas) |
 | **lancement** | ouvre FiveM |
@@ -63,8 +63,12 @@ prochaine fois.
 
 ## 🎯 Mods de chasse
 
-Mets les `.rpf` que tu veux pendant la chasse dans le dossier `mods_chasse`. Ils vont dans FiveM le temps de la
-chasse, puis en ressortent. Seuls les `.rpf` sont pris : jamais de `.dll` ni de `.asi`, qui sont des programmes.
+Mets les `.rpf` que tu veux pendant la chasse dans le dossier `mods_chasse`. À chaque chasse, mousquet te les
+propose un par un : rien n'est mis sans un `o`. Ceux que tu acceptes vont dans FiveM le temps de la chasse, puis en
+ressortent. Seuls les `.rpf` sont pris : jamais de `.dll` ni de `.asi`, qui sont des programmes.
+
+mousquet reconnaît **lowbush** (moins de buissons) et **stamina** (endurance infinie) et te dit ce qu'ils changent.
+Un mod qu'il ne connaît pas est proposé quand même, avec le même avertissement.
 
 ## 🛟 Si tu fermes mousquet avant FiveM
 

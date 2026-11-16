@@ -1,6 +1,7 @@
 """mousquet : mode chasse pour Cayo Perico (FiveM).
 Le temps de la chasse, FiveM tourne « tout neuf » : tes mods et ton pack graphique sont mis de côté, les graphismes
-au plus bas, lowbush seulement si tu dis oui. Quand FiveM se ferme, tout revient exactement à sa place.
+au plus bas, et chaque mod de chasse (lowbush, stamina…) seulement si tu dis oui. Quand FiveM se ferme, tout revient
+exactement à sa place.
 Lancé par mousquet.bat. q ou une relance ferment mousquet : un gardien discret remet alors tout à la fermeture de FiveM."""
 import ctypes
 import ctypes.wintypes as wt
@@ -70,8 +71,8 @@ def noter(message):
 
 # ============================ MODE CHASSE ==========================
 # Pendant la chasse, mousquet met de côté les mods et le pack graphique de ton FiveM : ils sont déplacés (même
-# disque : instantané, 0 Go en plus) dans FiveM\mis_de_cote_par_mousquet. Il met les mods de chasse (lowbush si tu
-# dis oui) et les réglages graphiques les plus bas. Quand FiveM se ferme, tout revient exactement à sa place. Une
+# disque : instantané, 0 Go en plus) dans FiveM\mis_de_cote_par_mousquet. Il met les mods de chasse auxquels tu dis
+# oui et les réglages graphiques les plus bas. Quand FiveM se ferme, tout revient exactement à sa place. Une
 # liste de chaque élément déplacé est écrite AVANT chaque déplacement : même après une panne, tout peut revenir.
 class PROCESSENTRY32W(ctypes.Structure):
     _fields_ = [("dwSize", wt.DWORD), ("cntUsage", wt.DWORD), ("th32ProcessID", wt.DWORD),
@@ -168,14 +169,17 @@ def remettre_reglages():
     return True
 
 
-MODS_RISQUES = ("lowbush.rpf",)    # mods qui donnent un avantage (moins de buissons) : demandés à chaque chasse
+# mods de chasse connus : nom affiché et ce qu'ils changent, pour l'avertissement (chaque mod est demandé à chaque chasse)
+AVANTAGES = {"lowbush": ("lowbush", "enlève des buissons"), "stamina": ("stamina", "endurance infinie")}
 
 
-def mods_risques_presents():
-    try:
-        return [f for f in os.listdir(MODS_CHASSE) if f.lower() in MODS_RISQUES]
-    except OSError:
-        return []
+def presentation(mod):
+    """(nom affiché, ce que le mod change ou None) pour un .rpf de mods_chasse."""
+    m = mod.lower()
+    for cle, (nom, effet) in AVANTAGES.items():
+        if cle in m:
+            return nom, effet
+    return os.path.splitext(mod)[0][:14], None
 
 
 def mods_de_chasse(refuses=()):
@@ -400,7 +404,7 @@ def label(t, droite=""):
 def ligne_diag(nom, detail, etat="ok"):
     detail = detail[:26]
     marque = {"fix": ink("  fix", REPARE), "warn": ink("   !!", MAUVAIS)}.get(etat, ink("    √", BON))
-    return ("   " + ink(nom, TEXTE) + " " + ink("·" * max(1, 11 - len(nom)), POINTILLE) + " "
+    return ("   " + ink(nom, TEXTE) + " " + ink("·" * max(1, 12 - len(nom)), POINTILLE) + " "
             + ink(f"{detail:<26}", MOYEN) + marque)
 
 
@@ -552,7 +556,7 @@ def chasser(e, stop):
 
     def demander(rang, nom, question, delai, avertissement=()):
         """Question o/n sur la ligne de l'étape (avertissement en dessous) ; sans réponse à temps, c'est non."""
-        e.ecrire(R_PREP + rang, "   " + ink(nom, TEXTE) + " " + ink("·" * max(1, 11 - len(nom)), POINTILLE) + " "
+        e.ecrire(R_PREP + rang, "   " + ink(nom, TEXTE) + " " + ink("·" * max(1, 12 - len(nom)), POINTILLE) + " "
                  + ink(question, OR))
         for i, l in enumerate(avertissement):
             e.ecrire(R_ETAT + i, "   " + ink(l, MAUVAIS if i == 0 else TEXTE))
@@ -584,18 +588,19 @@ def chasser(e, stop):
             raise RuntimeError("remise ratée · voir le log")
         return "trouvé · fermé", "ok"
 
-    def v_lowbush():
-        risques = mods_risques_presents()
-        if not risques:
-            return "pas dans mods_chasse", "ok"
-        for m in risques:
-            nom = os.path.splitext(m)[0]
-            if not demander(1, "lowbush", "le mettre ? ban possible · o/n", 20.0, (
-                    f"⚠ {nom} enlève des buissons : un avantage.",
+    def v_mods_chasse():
+        tous = mods_de_chasse()
+        if not tous:
+            return "aucun dans mods_chasse", "ok"
+        for m in tous:                             # chaque mod est demandé, rien n'est mis sans un « o »
+            nom, effet = presentation(m)
+            if not demander(1, "mods chasse", f"{nom} ? ban possible · o/n", 20.0, (
+                    f"⚠ {nom} : {effet}, un avantage." if effet else f"⚠ {nom} : un mod ajouté au jeu.",
                     "beaucoup de serveurs l'interdisent : tu peux",
                     "être banni. o = je le mets, n = sans (défaut).")):
                 ctx["refuses"].append(m)
-        return ("sans" if ctx["refuses"] else "mis · ban possible"), "ok"
+        mis = len(tous) - len(ctx["refuses"])
+        return (f"{mis}/{len(tous)} mis · ban possible" if mis else "aucun mis"), "ok"
 
     def v_mods():
         ctx["mods"] = mods_de_chasse(ctx["refuses"])
@@ -617,13 +622,13 @@ def chasser(e, stop):
     if etat != "ok":
         raise RuntimeError(detail)
     if ctx["deja"]:
-        for rang, nom in enumerate(("lowbush", "mods", "graphismes", "lancement"), 1):
+        for rang, nom in enumerate(("mods chasse", "mods", "graphismes", "lancement"), 1):
             faites[0] += 1
             e.ecrire(R_PREP + rang, ligne_diag(nom, "déjà fait"))
         animer(0.2)
     else:
         try:
-            for rang, nom, fn in ((1, "lowbush", v_lowbush), (2, "mods", v_mods), (3, "graphismes", v_graphismes),
+            for rang, nom, fn in ((1, "mods chasse", v_mods_chasse), (2, "mods", v_mods), (3, "graphismes", v_graphismes),
                                   (4, "lancement", v_lancement)):
                 etat, detail = verifier(rang, nom, fn)
                 if etat != "ok":
@@ -682,9 +687,10 @@ def chasser(e, stop):
                     etat = ink("○", OR) + " " + ink("FiveM fermé", TEXTE) + ink(f" · je remets tout dans {reste:.0f} s", TERNE)
                 e.ecrire(R_PISTE, "   " + piste)
                 e.ecrire(R_ETAT, "   " + etat)
-                e.ecrire(R_INFO, "   " + ink("depuis", TEXTE) + " " + ink("·" * 5, POINTILLE) + " "
-                         + ink(f"{int((now - debut) // 60)} min", MOYEN)
-                         + ink(f"   ·   mods : {', '.join(ctx['mods']) or 'aucun'}", TERNE))
+                mods = ", ".join(presentation(m)[0] for m in ctx["mods"]) or "aucun"
+                mods = mods if len(mods) <= 18 else mods[:17] + "…"     # la ligne tient dans les 52 colonnes
+                e.ecrire(R_INFO, "   " + ink("depuis", TEXTE) + " " + ink("·" * 6, POINTILLE) + " "
+                         + ink(f"{int((now - debut) // 60)} min", MOYEN) + ink(f"  ·  mods : {mods}", TERNE))
                 e.envoyer()
             time.sleep(0.05)
     finally:
