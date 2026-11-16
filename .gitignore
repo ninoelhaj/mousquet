@@ -1,0 +1,6 @@
+mousquet.log
+reglages/
+mods_chasse/*
+!mods_chasse/.gitkeep
+__pycache__/
+*.pyc
