@@ -280,7 +280,7 @@ def remettre_de_cote():
         except OSError:
             pass
     try:
-        os.rmdir(DE_COTE)                          # reste seulement s'il garde des conflits
+        os.rmdir(DE_COTE)
     except OSError:
         pass
     noter(f"chasse finie : tes mods et ton pack sont revenus ({len(liste.get('deplaces', []))} élément(s))")

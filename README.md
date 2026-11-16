@@ -1,4 +1,6 @@
-<h1 align="center">mousquet</h1>
+<p align="center">
+  <img src="docs/banniere.png" alt="mousquet" width="100%">
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0B0B0E?style=flat-square&logo=windows&logoColor=white" alt="Windows">
@@ -12,24 +14,9 @@
 « tout neuf » : sans tes mods, sans ton pack graphique, avec les graphismes au plus bas. Quand tu fermes FiveM, tout
 revient exactement à sa place.
 
-```
-   ▄ ▄ ▄  mousquet                    16/11 13:48
-   ▄███▄  jungle cayo · mode chasse
-   ──────────────────────────────────────────────
-
-   préparation
-   fivem ······ trouvé · fermé                √
-   lowbush ···· mis · ban possible            √
-   mods ······· 15 éléments mis de côté       √
-   graphismes · au plus bas                   √
-   lancement ·· FiveM lancé                   √
-
-   chasse
-   ● en chasse · FiveM ouvert
-   depuis ····· 12 min   ·   mods : lowbush.rpf
-
-   ● on · q quitte · tout revient à la fermeture
-```
+<p align="center">
+  <img src="docs/console.webp" alt="mousquet pendant une chasse : préparation, question lowbush, FiveM ouvert, puis tout revient" width="470">
+</p>
 
 > [!NOTE]
 > mousquet ne touche ni au jeu ni à sa mémoire, et n'appuie sur aucune touche. Jeu fermé, il déplace des fichiers
@@ -51,6 +38,14 @@ mousquet prépare tout, lance FiveM, puis attend. Tu joues normalement. Quand tu
 au bout de 10 secondes, affiche « chasse finie · tout est revenu » et se ferme tout seul.
 
 ## 🌿 Ce qu'il fait
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/question.png" alt="La question lowbush" width="260"><br><sub><b>Avant</b> : lowbush, avec l'avertissement</sub></td>
+    <td align="center"><img src="docs/chasse.png" alt="En chasse" width="260"><br><sub><b>Pendant</b> : FiveM tourne tout neuf</sub></td>
+    <td align="center"><img src="docs/fin.png" alt="Tout est revenu" width="260"><br><sub><b>Après</b> : tout est revenu</sub></td>
+  </tr>
+</table>
 
 | Étape | Ce qui se passe |
 |---|---|
