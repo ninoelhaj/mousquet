@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banniere.png" alt="mousquet" width="100%">
+  <img src="docs/banniere.webp" alt="mousquet" width="100%">
 </p>
 
 <p align="center">
