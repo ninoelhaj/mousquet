@@ -1,0 +1,46 @@
+[package]
+name = "mousquet"
+version = "1.1.0"
+edition = "2024"
+description = "Mode chasse pour Cayo Perico (FiveM, Baylife)"
+license-file = "LICENSE"
+publish = false
+
+[dependencies]
+regex = "1.13"
+serde_json = "1.0"
+
+[build-dependencies]
+embed-resource = "3"
+
+[dependencies.windows]
+version = "0.62"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_Threading",
+    "Win32_System_SystemInformation",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_Console",
+    "Win32_System_Registry",
+    "Win32_Storage_FileSystem",
+    "Win32_System_LibraryLoader",
+    "Win32_System_WinRT",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_HiDpi",
+    "Win32_Graphics_Gdi",
+    "Foundation",
+    "Foundation_Collections",
+    "Media_Ocr",
+    "Graphics_Imaging",
+    "Globalization",
+    "Storage_Streams",
+]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+

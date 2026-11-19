@@ -3,81 +3,105 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0B0B0E?style=flat-square&logo=windows&logoColor=white" alt="Windows">
-  <img src="https://img.shields.io/badge/Python-3.12+-84DE78?style=flat-square&logo=python&logoColor=white" alt="Python 3.12+">
-  <img src="https://img.shields.io/badge/d%C3%A9pendances-aucune-0B0B0E?style=flat-square" alt="Aucune dépendance">
-  <img src="https://img.shields.io/badge/serveur-Baylife-84DE78?style=flat-square" alt="Baylife">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licence-utilisation%20seule-0B0B0E?style=flat-square" alt="Licence : utilisation seule"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0C0A09?style=flat-square&logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/Rust-2024-E8862A?style=flat-square&logo=rust&logoColor=white" alt="Rust">
+  <img src="https://img.shields.io/badge/d%C3%A9pendances-aucune-0C0A09?style=flat-square" alt="Aucune dépendance">
+  <img src="https://img.shields.io/badge/serveur-Baylife-E8862A?style=flat-square" alt="Baylife">
+  <a href="../../actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/ninoelhaj/mousquet/release.yml?style=flat-square&label=compilation" alt="Compilation"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licence-utilisation%20seule-0C0A09?style=flat-square" alt="Licence : utilisation seule"></a>
 </p>
 
-**mousquet** prépare FiveM pour la chasse à Cayo Perico sur **Baylife**. Le temps de la chasse, ton FiveM tourne
-« tout neuf » : sans tes mods, sans ton pack graphique, avec les graphismes au plus bas. Quand tu fermes FiveM, tout
-revient exactement à sa place.
+**mousquet** prépare FiveM pour la chasse à Cayo Perico sur **Baylife**, en un double-clic. Ton pack graphique et tes
+mods restent ; le temps du jeu, mousquet ajoute les **arbres sans feuilles**, les mods de `mods_chasse` (lowbush) et
+la **macro peaux**. Quand tu fermes FiveM, tout est retiré : ton FiveM redevient exactement ce qu'il était.
 
-<p align="center">
-  <img src="docs/console.webp" alt="mousquet pendant une chasse : préparation, chaque mod demandé, FiveM ouvert, puis tout revient" width="470">
-</p>
-
-> [!NOTE]
-> mousquet ne touche ni au jeu ni à sa mémoire, et n'appuie sur aucune touche. Jeu fermé, il déplace des fichiers
-> dans le dossier de FiveM et change tes réglages graphiques. C'est tout.
+Un seul fichier, `mousquet.exe`, écrit en Rust : rien à installer, aucune question.
 
 > [!WARNING]
-> Les mods de chasse comme **lowbush** (moins de buissons) ou **stamina** (endurance infinie) donnent un avantage
-> et sont interdits sur beaucoup de serveurs : **ban possible**. mousquet ne fournit aucun mod. Si tu en mets, il te
-> les demande un par un à chaque chasse, avec cet avertissement.
+> Les arbres sans feuilles, lowbush et la macro donnent un avantage et sont interdits sur beaucoup de serveurs :
+> **ban possible**. mousquet ne fournit aucun mod. Tu les utilises à tes risques.
+
+> [!NOTE]
+> mousquet ne lit jamais la mémoire du jeu et n'y injecte rien. Jeu fermé, il pose quelques fichiers de données
+> dans le dossier de FiveM. Jeu ouvert, il lit l'écran et appuie sur les touches seulement quand tu fais Ctrl+F7.
 
 ## 🚀 Démarrer
 
-1. Installe [Python 3.12 ou plus](https://www.python.org/downloads/) (coche « Add python.exe to PATH »).
-   mousquet n'a besoin d'aucune autre bibliothèque.
-2. Télécharge le dépôt : bouton **Code** → **Download ZIP**, puis décompresse-le où tu veux.
-3. **Ferme FiveM**, puis double-clique sur `mousquet.bat`.
+1. Récupère `mousquet.exe` :
+   - **tout prêt** : dans la [dernière version](../../releases/latest) (compilé par GitHub depuis ce code, avec son
+     empreinte SHA-256) ;
+   - **ou compilé chez toi** : télécharge le code (**Code** → **Download ZIP**), puis double-clique sur
+     `compiler.bat` (voir *Compiler soi-même* plus bas).
 
-mousquet prépare tout, lance FiveM, puis attend. Tu joues normalement. Quand tu fermes FiveM, il remet tout en place
-au bout de 10 secondes, affiche « chasse finie · tout est revenu » et se ferme tout seul.
+   Mets-le dans un dossier à toi (par exemple `Bureau\mousquet`), avec tes mods de chasse (`.rpf`) dans le dossier
+   `mods_chasse` à côté.
+2. **Ferme FiveM**, puis double-clique sur `mousquet.exe`. Au premier lancement, Windows peut afficher « Windows a
+   protégé votre ordinateur » : **Informations complémentaires** → **Exécuter quand même** (l'exe n'est pas signé).
 
-## 🌿 Ce qu'il fait
+Une petite console s'ouvre, montre l'état, puis se ferme toute seule :
 
-<table>
-  <tr>
-    <td align="center"><img src="docs/question.png" alt="Un mod de chasse demandé, avec l'avertissement" width="260"><br><sub><b>Avant</b> : chaque mod demandé, avec l'avertissement</sub></td>
-    <td align="center"><img src="docs/chasse.png" alt="En chasse" width="260"><br><sub><b>Pendant</b> : FiveM tourne tout neuf</sub></td>
-    <td align="center"><img src="docs/fin.png" alt="Tout est revenu" width="260"><br><sub><b>Après</b> : tout est revenu</sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/console.png" alt="La console de mousquet" width="602">
+</p>
 
-| Étape | Ce qui se passe |
-|---|---|
-| **fivem** | vérifie que FiveM est installé et fermé (ouvert, il refuse : les fichiers seraient verrouillés) |
-| **mods chasse** | pour chaque mod de `mods_chasse`, te demande `o` ou `n` (sans réponse en 20 s : non) |
-| **mods** | déplace tout ce qui est dans `FiveM.app\mods` et `FiveM.app\plugins` (mods, ReShade, presets…) vers `FiveM\mis_de_cote_par_mousquet`, puis copie tes mods de chasse |
-| **graphismes** | garde tes réglages dans `reglages\normal.xml` et met les plus bas du jeu (résolution, plein écran et densité de population ne bougent pas) |
-| **lancement** | ouvre FiveM |
+Ensuite, un programme sans fenêtre reste en fond : il garde la macro, relance FiveM s'il s'arrête pendant son
+démarrage (mise à jour, changement de version) et, quand tu fermes FiveM, retire tout au bout de 10 secondes puis
+s'arrête. Rien à fermer de ton côté.
 
-Les fichiers sont **déplacés**, pas copiés : c'est instantané et ça ne prend aucune place en plus. Une liste de chaque
-élément est écrite **avant** chaque déplacement : même après une panne de courant, tout peut revenir.
+Si FiveM est déjà ouvert quand tu lances mousquet, la macro marche tout de suite et les arbres seront là au
+prochain lancement de FiveM (le jeu lit ces fichiers à son démarrage).
 
-Si tu changes des réglages graphiques pendant la chasse, ils sont gardés dans `reglages\chasse.xml` pour la
-prochaine fois.
+> [!TIP]
+> `mousquet.exe --apercu` ouvre seulement la console avec un état d'exemple : rien n'est posé ni lancé.
 
-## 🎯 Mods de chasse
+## 🌳 Arbres sans feuilles
 
-Mets les `.rpf` que tu veux pendant la chasse dans le dossier `mods_chasse`. À chaque chasse, mousquet te les
-propose un par un : rien n'est mis sans un `o`. Ceux que tu acceptes vont dans FiveM le temps de la chasse, puis en
-ressortent. Seuls les `.rpf` sont pris : jamais de `.dll` ni de `.asi`, qui sont des programmes.
+Ce sont les 20 réglages de shaders des arbres (`citizen\common\shaders\db\trees*.sps`), vidés comme dans le pack
+Skyline : les feuillages ne sont plus dessinés, tu vois à travers. Ton pack normal n'est pas modifié : ces fichiers
+sont posés à côté le temps du jeu, puis retirés.
 
-mousquet reconnaît **lowbush** (moins de buissons) et **stamina** (endurance infinie) et te dit ce qu'ils changent.
-Un mod qu'il ne connaît pas est proposé quand même, avec le même avertissement.
+## 🦌 Macro peaux
 
-## 🛟 Si tu fermes mousquet avant FiveM
+Après une bête, **Ctrl + F7** fait à ta place :
 
-- **q**, **une relance** de `mousquet.bat` ou **la croix** de la fenêtre : mousquet se ferme et laisse un gardien
-  discret, sans fenêtre. Il remet tout dès que FiveM se ferme.
-- **FiveM ne s'ouvre jamais** (90 s) : tout est remis.
-- **Panne** (PC éteint en pleine chasse) : relance `mousquet.bat`. Il remet d'abord tout ce qui est resté de côté.
-- Si un fichier a été recréé par FiveM pendant la chasse à la place d'un des tiens, rien n'est écrasé : le nouveau
-  est gardé dans `FiveM\mis_de_cote_par_mousquet\conflits`.
+1. **F2** → Déposer → chaque **peau de bête exotique**, rare ou non, au maximum dans ton sac ;
+2. **F5** → Inventaire → chaque **venaison exotique** → Supprimer → Oui.
+
+Si le sac est plein, le reste reste dans ton inventaire.
+
+**Comment elle tient la route.** Les menus de Baylife sont des menus RageUI : après chaque appui, RageUI ignore la
+même touche pendant **175 ms**. L'ancienne macro tapait toutes les 130 ms, donc une flèche sur deux était perdue et
+elle s'arrêtait sur « curseur pas sur la bonne ligne ». Maintenant :
+
+- **le bon rythme** : deux appuis de la même touche sont espacés de 215 ms ; deux touches différentes s'enchaînent
+  sans attendre ;
+- **chaque appui est vu** : la barre blanche de la ligne choisie est repérée aux pixels en moins d'une
+  milliseconde ; si elle n'a ni bougé ni changé de texte, la touche est refaite ;
+- **l'OCR seulement pour décider** : l'OCR de Windows lit toute la liste quand il faut y chercher une ligne, sinon
+  seulement le haut du menu jusqu'à la ligne choisie ; une lecture déjà faite n'est jamais refaite ;
+- **le plus court chemin** : les menus gardent la position du curseur, et RageUI passe de la dernière ligne à la
+  première : la macro prend le bout le plus proche ;
+- **jamais une Entrée à l'aveugle** : la ligne est relue deux fois avant chaque Entrée (« Supprimer », puis « Oui »
+  sur la venaison seulement). Un menu inattendu, ou FiveM qui passe derrière, l'arrête net.
+
+Chaque résultat est noté dans `mousquet.log` avec sa durée. Un arrêt y est noté avec ses derniers pas (touches
+✓ vues, ✗ refaites, et ce qui a été lu) et l'image de ce moment-là (`reglages\macro_erreurs`).
+
+## 🛟 Crash, coupure, PC qui s'éteint
+
+Ton citizen et tes mods ne restent jamais abîmés :
+
+- avant de toucher à quoi que ce soit, mousquet écrit sur le disque un **journal** de tout ce qu'il va poser, de ce
+  qui existait déjà et des dossiers qu'il va créer ;
+- un fichier à toi n'est **jamais écrasé** : s'il porte le même nom, il est mis de côté dans
+  `FiveM\mis_de_cote_par_mousquet`, puis remis ;
+- chaque fichier est écrit à côté puis mis en place d'un coup : jamais de fichier à moitié écrit ;
+- au retrait, un fichier n'est effacé que s'il est **exactement** celui que mousquet a posé ; s'il a changé, il est
+  gardé dans `mis_de_cote_par_mousquet\conflits` ;
+- le temps du jeu, une ligne `mousquet_reprise` est ajoutée au démarrage de Windows : si le PC s'éteint d'un coup,
+  mousquet se relance tout seul au démarrage suivant, sans fenêtre, attend que FiveM soit fermé et remet tout, puis
+  retire cette ligne. En temps normal, elle est retirée dès la fin du jeu ;
+- relancer `mousquet.exe` remet aussi d'abord tout ce qui serait resté, avant de reposer quoi que ce soit.
 
 Tout ce que fait mousquet est noté dans `mousquet.log`.
 
@@ -85,11 +109,39 @@ Tout ce que fait mousquet est noté dans `mousquet.log`.
 
 | Fichier | Rôle |
 |---|---|
-| `mousquet.bat` | lance mousquet dans sa console |
-| `mousquet.py` | tout le programme (bibliothèque standard de Python seulement) |
-| `mods_chasse\` | tes mods de chasse (`.rpf`) |
-| `reglages\` | créé au premier lancement : tes réglages normaux et ceux de chasse |
-| `mousquet.log` | créé au premier lancement : le journal |
+| `mousquet.exe` | tout le programme |
+| `compiler.bat` | compile `mousquet.exe` depuis le code (Rust) |
+| `mods_chasse\` | tes mods de chasse (`.rpf` seulement, jamais de `.dll` ni de `.asi`) |
+| `reglages\macro_erreurs\` | les images lues quand la macro s'est arrêtée |
+| `mousquet.log` | le journal |
+
+## 🛠️ Compiler soi-même
+
+**Le plus simple** : installe [Rust](https://rustup.rs) (`rustup-init.exe`, choix par défaut ; il propose aussi les
+outils de build C++ de Visual Studio s'ils manquent), puis double-clique sur **`compiler.bat`**. Il compile et pose
+`mousquet.exe` à côté de lui. La première compilation prend quelques minutes.
+
+**En ligne de commande** :
+
+```powershell
+winget install Rustlang.Rustup
+cargo build --release
+```
+
+L'exe est dans `target\release\mousquet.exe`. `cargo test` lance les essais : pose et retrait à l'identique, une
+coupure de courant simulée à chaque instant de la pose, fichiers changés pendant le jeu, relances de FiveM, la barre
+du menu repérée aux pixels, et la macro sur un faux jeu RageUI (verrou de 175 ms par touche, curseurs gardés, listes
+qui défilent, sac plein, 25 venaisons, 200 cas tirés au sort avec OCR bruité et touches perdues).
+
+**Sur GitHub** : chaque push est compilé et testé par [GitHub Actions](.github/workflows/release.yml) (l'exe est
+gardé comme artefact). Pour publier une version :
+
+```powershell
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+La Release est créée toute seule, avec `mousquet.exe` et `mousquet.exe.sha256`.
 
 ## 📜 Licence
 

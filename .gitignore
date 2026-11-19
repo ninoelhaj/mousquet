@@ -4,3 +4,12 @@ mods_chasse/*
 !mods_chasse/.gitkeep
 __pycache__/
 *.pyc
+citizen_chasse/*
+!citizen_chasse/.gitkeep
+/target
+/mousquet.exe
+
+# anciennes versions Python, gardées en local seulement
+mousquet.py
+mousquet.bat
+interface.py
